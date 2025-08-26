@@ -1,0 +1,20 @@
+{
+    "name": "dev-craft/jwt-auth",
+    "description": "A JWT authentication package for Laravel.",
+    "autoload": {
+        "psr-4": {
+            "DevCraft\\JwtAuth\\": "src/"
+        }
+    },
+      "require": {
+        "php": "^8.1",
+        "firebase/php-jwt": "^6.11"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DevCraft\\JwtAuth\\Providers\\JwtAuthServiceProvider"
+            ]
+        }
+    }
+}
