@@ -1,6 +1,6 @@
 <?php
 
-namespace DevCraft\JwtAuth\Mail;
+namespace Magico\JwtAuth\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;

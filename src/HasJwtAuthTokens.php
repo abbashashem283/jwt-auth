@@ -1,10 +1,10 @@
 <?php
 
-namespace DevCraft\JwtAuth ;
+namespace Magico\JwtAuth ;
 
-use DevCraft\JwtAuth\Models\AuthRevoke;
-use DevCraft\JwtAuth\Models\EmailVerificationToken;
-use DevCraft\JwtAuth\Models\ResetPasswordToken;
+use Magico\JwtAuth\Models\AuthRevoke;
+use Magico\JwtAuth\Models\EmailVerificationToken;
+use Magico\JwtAuth\Models\ResetPasswordToken;
 
 trait HasJwtAuthTokens{
      public function authRevoke(){

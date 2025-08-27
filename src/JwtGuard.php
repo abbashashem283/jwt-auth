@@ -1,11 +1,11 @@
 <?php
 
-namespace DevCraft\JwtAuth;
+namespace Magico\JwtAuth;
 
 
 
-use DevCraft\JwtAuth\Models\AuthRevoke;
-use DevCraft\JwtAuth\users\enums\UserAuthStatus;
+use Magico\JwtAuth\Models\AuthRevoke;
+use Magico\JwtAuth\users\enums\UserAuthStatus;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;

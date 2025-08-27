@@ -1,9 +1,9 @@
 {
-    "name": "dev-craft/jwt-auth",
+    "name": "magico/jwt-auth",
     "description": "A JWT authentication package for Laravel.",
     "autoload": {
         "psr-4": {
-            "DevCraft\\JwtAuth\\": "src/"
+            "Magico\\JwtAuth\\": "src/"
         }
     },
       "require": {
@@ -13,7 +13,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "DevCraft\\JwtAuth\\Providers\\JwtAuthServiceProvider"
+                "Magico\\JwtAuth\\Providers\\JwtAuthServiceProvider"
             ]
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace DevCraft\JwtAuth;
+namespace Magico\JwtAuth;
 
 use Carbon\Carbon;
 use Firebase\JWT\JWT;

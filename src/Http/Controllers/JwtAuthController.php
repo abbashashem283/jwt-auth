@@ -1,14 +1,14 @@
 <?php
 
-namespace DevCraft\JwtAuth\Http\Controllers;
+namespace Magico\JwtAuth\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
-use DevCraft\JwtAuth\Mail\AuthMail;
-use DevCraft\JwtAuth\Models\EmailVerificationToken;
-use DevCraft\JwtAuth\Models\ResetPasswordToken;
-use DevCraft\JwtAuth\users\enums\UserAuthStatus;
+use Magico\JwtAuth\Mail\AuthMail;
+use Magico\JwtAuth\Models\EmailVerificationToken;
+use Magico\JwtAuth\Models\ResetPasswordToken;
+use Magico\JwtAuth\users\enums\UserAuthStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;

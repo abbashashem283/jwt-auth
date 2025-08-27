@@ -1,6 +1,6 @@
 <?php
 
-namespace DevCraft\JwtAuth\users\enums;
+namespace Magico\JwtAuth\users\enums;
 
 enum UserAuthStatus: int{
     case REVOKED = 0;

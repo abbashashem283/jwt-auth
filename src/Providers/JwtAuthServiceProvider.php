@@ -1,12 +1,12 @@
 <?php
 
-namespace DevCraft\JwtAuth\Providers;
+namespace Magico\JwtAuth\Providers;
 
 
 use Illuminate\Support\ServiceProvider;
-use DevCraft\JwtAuth\Commands\JwtSecretGenerate;
-use DevCraft\JwtAuth\JwtGuard;
-use DevCraft\JwtAuth\JwtService;
+use Magico\JwtAuth\Commands\JwtSecretGenerate;
+use Magico\JwtAuth\JwtGuard;
+use Magico\JwtAuth\JwtService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Auth\UserProvider;

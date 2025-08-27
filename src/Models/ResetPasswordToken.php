@@ -1,6 +1,6 @@
 <?php
 
-namespace DevCraft\JwtAuth\Models;
+namespace Magico\JwtAuth\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
