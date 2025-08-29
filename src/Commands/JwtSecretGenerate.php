@@ -1,6 +1,6 @@
 <?php
 
-namespace DevCraft\JwtAuth\Commands;
+namespace Magico\JwtAuth\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
