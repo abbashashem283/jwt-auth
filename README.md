@@ -58,10 +58,10 @@ and
 MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=587
-MAIL_USERNAME="abbashashem93075@gmail.com"
-MAIL_PASSWORD="wqji fdpf ihxo kxhw"
+MAIL_USERNAME= "put your email here"
+MAIL_PASSWORD="password you got from google"
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="abbashashem93075@gmail.com"
+MAIL_FROM_ADDRESS="put your email here"
 MAIL_FROM_NAME="Jwt Auth"
 
 8-Make sure user model has the following fields (email verified at, email, password) and it must extend Authenticatable and use the HasJwtAuthTokens trait
