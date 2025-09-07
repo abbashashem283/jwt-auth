@@ -31,6 +31,8 @@ class JwtAuthController extends Controller
             "password"=>"required|string"
         ]);
         $storedUser = $this->model::where("email", $validatedData["email"])->first();
+        if(!$storedUser)
+            return response()->json(["error"=>"User not found"], 404);
         if(!$storedUser->email_verified_at){
             $this->sendVerificationEmail($storedUser);
             return response()->json([
