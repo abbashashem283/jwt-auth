@@ -42,7 +42,7 @@ class JwtAuthController extends Controller
         }
         $tokens = auth()->attempt($validatedData);
         if (!$tokens)
-            return response()->json(['message' => 'Could not log in', "type"=>"error"], 401);
+            return response()->json(['message' => 'Invalid Credentials', "type"=>"error"], 401);
         return response()->json($tokens);
     }
 
@@ -50,7 +50,7 @@ class JwtAuthController extends Controller
     {
         $invalidate = auth()->invalidate(UserAuthStatus::REVOKED->value);
         if (!$invalidate)
-            return response()->json(["message"=>"attempt failed", "type"=>"error"], 409);
+            return response()->json(["message"=>"Logout failed", "type"=>"error"], 409);
         return response()->json(["message"=>"User logged out", "type"=>"success"], 200);
     }
 
@@ -135,7 +135,7 @@ class JwtAuthController extends Controller
         $this->sendVerificationEmail($user);
 
 
-        return response()->json(["message"=>"User registered! email sent to {$user->email}", "type"=>"success"]);
+        return response()->json(["message"=>"User registered! Email sent to {$user->email}", "type"=>"success"]);
         //return response("hi");
     }
 
@@ -153,11 +153,11 @@ class JwtAuthController extends Controller
             return response()->json(["message"=>"Expired Link", "type"=>"error"], 403);
         $storedUser = $this->model::where("email", $email)->first();
         if (!$storedUser)
-            return response()->json(["message"=>"Invalid User", "type"=>"error"], 403);
+            return response()->json(["message"=>"User not found!", "type"=>"error"], 403);
         $storedUser->email_verified_at = Carbon::now();
         $storedUser->save();
         $storedToken->delete();
-        return response()->json(["message" => "email verified successfully", "type"=>"success"]);
+        return response()->json(["message" => "Email verified successfully", "type"=>"success"]);
     }
 
     public function checkPasswordCode(Request $request)
@@ -180,10 +180,10 @@ class JwtAuthController extends Controller
             return response()->json(["message"=>"Unauthorized", "type"=>"error"], 403);
         $tokenExpired = Carbon::now()->timestamp > $resetPasswordToken->exp;
         if ($tokenExpired)
-            return response()->json(["message"=>"Expired Link", "type"=>"error"], 403);
+            return response()->json(["message"=>"Expired Code", "type"=>"error"], 403);
         $tokenIsValid = Hash::check($code, $resetPasswordToken->token);
         if (!$tokenIsValid)
-            return response()->json(["message"=>"Unauthorized", "type"=>"error"], 403);
+            return response()->json(["message"=>"Invalid Code", "type"=>"error"], 403);
         return response()->json(["message" => "code is valid", "type"=>"success"]);
     }
 
@@ -206,7 +206,7 @@ class JwtAuthController extends Controller
             "password" => $newPassword
         ]);
         $storedUser->resetPasswordToken?->delete();
-        return response()->json(["message" => "password updated!", "type"=>"success"]);
+        return response()->json(["message" => "Password updated!", "type"=>"success"]);
     }
 
     public function forgotPassword(Request $request)
@@ -245,6 +245,6 @@ class JwtAuthController extends Controller
                 ])
             );
 
-        return response()->json(["message" => "code sent to $email","type"=>"success"]);
+        return response()->json(["message" => "Code sent to $email","type"=>"success"]);
     }
 }
