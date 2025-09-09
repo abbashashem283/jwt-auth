@@ -32,16 +32,17 @@ class JwtAuthController extends Controller
         ]);
         $storedUser = $this->model::where("email", $validatedData["email"])->first();
         if(!$storedUser)
-            return response()->json(["message"=>"User not found"], 404);
+            return response()->json(["message"=>"User not found", "type"=>"error"], 404);
         if(!$storedUser->email_verified_at){
             $this->sendVerificationEmail($storedUser);
             return response()->json([
-                "message"=>"Email unverified. Sent verification email to {$storedUser->email}"
+                "message"=>"Email unverified. Sent verification email to {$storedUser->email}",
+                "type"=>"warning"
             ]);
         }
         $tokens = auth()->attempt($validatedData);
         if (!$tokens)
-            return response()->json(['message' => 'Could not log in'], 401);
+            return response()->json(['message' => 'Could not log in', "type"=>"error"], 401);
         return response()->json($tokens);
     }
 
@@ -49,15 +50,15 @@ class JwtAuthController extends Controller
     {
         $invalidate = auth()->invalidate(UserAuthStatus::REVOKED->value);
         if (!$invalidate)
-            return response()->json(["message"=>"attempt failed"], 409);
-        return response()->json(["message"=>"User logged out"], 200);
+            return response()->json(["message"=>"attempt failed", "type"=>"error"], 409);
+        return response()->json(["message"=>"User logged out", "type"=>"success"], 200);
     }
 
     public function refresh()
     {
         $tokens = auth()->refreshTokens();
         if (!$tokens)
-            return response()->json(["message"=>'Unauthorized'], 401);
+            return response()->json(["message"=>'Unauthorized', "type"=>"error"], 401);
         return response()->json($tokens);
     }
 
@@ -128,13 +129,13 @@ class JwtAuthController extends Controller
         $user = $this->model::create($validatedData);
 
         if (!$user) {
-            return response()->json(["message"=>"Could not create user"], 500);
+            return response()->json(["message"=>"Could not create user", "type"=>"error"], 500);
         }
 
         $this->sendVerificationEmail($user);
 
 
-        return response()->json(["message"=>"User registered! email sent to {$user->email}"]);
+        return response()->json(["message"=>"User registered! email sent to {$user->email}", "type"=>"success"]);
         //return response("hi");
     }
 
@@ -143,20 +144,20 @@ class JwtAuthController extends Controller
         $token = $request->query("token");
         $email = $request->query("email");
         if (!$token)
-            return response()->json(["message"=>"Unauthorized"], 403);
+            return response()->json(["message"=>"Unauthorized", "type"=>"error"], 403);
         $storedToken = EmailVerificationToken::where("user_email", $email)->first();
         if (!$storedToken || !Hash::check($token, $storedToken->token))
-            return response()->json(["message"=>"Unauthorized"], 403);
+            return response()->json(["message"=>"Unauthorized", "type"=>"error"], 403);
         $tokenIsValid = Carbon::now()->timestamp < $storedToken->exp;
         if (!$tokenIsValid)
-            return response()->json(["message"=>"Expired Link"], 403);
+            return response()->json(["message"=>"Expired Link", "type"=>"error"], 403);
         $storedUser = $this->model::where("email", $email)->first();
         if (!$storedUser)
-            return response()->json(["message"=>"Invalid User"], 403);
+            return response()->json(["message"=>"Invalid User", "type"=>"error"], 403);
         $storedUser->email_verified_at = Carbon::now();
         $storedUser->save();
         $storedToken->delete();
-        return response()->json(["message" => "email verified successfully"]);
+        return response()->json(["message" => "email verified successfully", "type"=>"success"]);
     }
 
     public function checkPasswordCode(Request $request)
@@ -167,7 +168,7 @@ class JwtAuthController extends Controller
         ]);
         $storedUser = $this->model::where("email", $validatedData["email"])->first();
         if (!$storedUser)
-            return response()->json(["message"=>"User not found"], 404);
+            return response()->json(["message"=>"User not found", "type"=>"error"], 404);
         return $this->checkCode($storedUser, $validatedData["code"]);
     }
 
@@ -176,14 +177,14 @@ class JwtAuthController extends Controller
     {
         $resetPasswordToken = $user->resetPasswordToken;
         if (!$resetPasswordToken)
-            return response()->json(["message"=>"Unauthorized"], 403);
+            return response()->json(["message"=>"Unauthorized", "type"=>"error"], 403);
         $tokenExpired = Carbon::now()->timestamp > $resetPasswordToken->exp;
         if ($tokenExpired)
-            return response()->json(["message"=>"Expired Link"], 403);
+            return response()->json(["message"=>"Expired Link", "type"=>"error"], 403);
         $tokenIsValid = Hash::check($code, $resetPasswordToken->token);
         if (!$tokenIsValid)
-            return response()->json(["message"=>"Unauthorized"], 403);
-        return response()->json(["message" => "code is valid"]);
+            return response()->json(["message"=>"Unauthorized", "type"=>"error"], 403);
+        return response()->json(["message" => "code is valid", "type"=>"success"]);
     }
 
     public function resetPassword(Request $request)
@@ -195,7 +196,7 @@ class JwtAuthController extends Controller
         ]);
         $storedUser = $this->model::where("email", $validatedData["email"])->first();
         if (!$storedUser)
-            return response()->json(["message"=>"User not found"], 404);
+            return response()->json(["message"=>"User not found", "type"=>"error"], 404);
 
         $checkCode = $this->checkCode($storedUser, $validatedData["code"]);
         if ($checkCode->getStatusCode() != 200)
@@ -205,7 +206,7 @@ class JwtAuthController extends Controller
             "password" => $newPassword
         ]);
         $storedUser->resetPasswordToken?->delete();
-        return response()->json(["message" => "password updated!"]);
+        return response()->json(["message" => "password updated!", "type"=>"success"]);
     }
 
     public function forgotPassword(Request $request)
@@ -216,7 +217,7 @@ class JwtAuthController extends Controller
         $email = $validatedData["email"];
         $storedUser = $this->model::where("email", $email)->first();
         if (!$storedUser)
-            return response()->json(["message"=>"User not found"], 404);
+            return response()->json(["message"=>"User not found", "type"=>"error"], 404);
 
         $token = Str::random(6);
         $hashedToken = Hash::make($token);
@@ -244,6 +245,6 @@ class JwtAuthController extends Controller
                 ])
             );
 
-        return response()->json(["message" => "code sent to $email"]);
+        return response()->json(["message" => "code sent to $email","type"=>"success"]);
     }
 }
